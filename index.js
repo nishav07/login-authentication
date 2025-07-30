@@ -22,6 +22,12 @@ app.get("/signup",(req,res) => {
 
 app.post("/signup",(req,res) => {
     console.log(req.body);
+    let data = req.body;
+    let username = data.username;
+    let email = data.email;
+    let password = data.password;
+    console.log(username,password,email);
+    res.redirect("/")
 })
 
 app.get("/login" , (req,res) => {
