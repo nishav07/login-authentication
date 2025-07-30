@@ -1,13 +1,12 @@
 {
   "dependencies": {
+    "dotenv": "^17.2.1",
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3"
   },
-
   "scripts": {
-  "start": "nodemon index.js",
-  "hello": "echo Hello, bhai! Welcome to your project!"
+    "start": "nodemon index.js",
+    "hello": "echo Hello, bhai! Welcome to your project!"
   }
-
 }
-
