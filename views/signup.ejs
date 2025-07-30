@@ -4,8 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>signup page</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            color: black;
+            box-sizing: border-box;
+            text-decoration: none;
+            outline: none;
+        }
+
+        main{
+            height: 100vh;
+            width: 100%;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container form{
+            height: auto;
+            width:30rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:2rem;
+            border: 2px solid black;
+            border-radius: 2rem;
+        }
+
+        .container input{
+            height: 4rem;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.25rem;
+            border-radius: 2rem;
+        }
+
+        .container a{
+            font-size: 1.25rem;
+        }
+
+        .container button{
+            height: 3rem;
+            width: 8rem;
+            font-size: 1.25rem;
+            border-radius: 2rem;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>signup page</h1>
+    <main>
+        <div class="container">
+            <form action="/signup" method="get">
+                <input type="text" name="username" placeholder="username" required>
+                <input type="email" name="email" placeholder="abc123@email.com" required>
+                <input type="password" name="password" required>
+                <button type="submit">Signup</button>
+                <a href="">Create one?</a>
+            </form>
+        </div>
+    </main>
 </body>
 </html>
