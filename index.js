@@ -55,7 +55,7 @@ app.post("/signup",(req,res) => {
 })
 
 app.get("/login" , (req,res) => {
-    res.render("login");
+    res.render("login",{ err: null });
 })
 
 app.post("/login" , (req,res) => {
@@ -63,5 +63,16 @@ app.post("/login" , (req,res) => {
     let data = req.body;
     let username = data.username;
     let password = data.password;
-    console.log(username,password,email);
+    console.log(username,password);
+    pool.query(`SELECT * FROM users WHERE username = ? AND password = ?`,[username,password],(err,data) => {
+      
+      if(err){
+        res.render("login",{err:"database error"})
+      } else if(data.length > 0){
+        console.log(data[0])
+        res.render("userdash.ejs",{user:data[0]})
+      } else {
+        res.render("login",{err:"invalid username or password"})
+      }
+    })
 })
