@@ -14,7 +14,7 @@ function isLoggedIn(req, res, next) {
   if (req.session && req.session.user) {
     next();
   } else {
-    res.redirect('/login');
+    res.render("login",{err:"please login first"});
   }
 }
 
@@ -52,7 +52,7 @@ app.get("/" , (req,res) => {
 })
 
 app.get("/signup",(req,res) => {
-    res.render("signup");
+    res.render("signup",{ err: null });
 })
 
 app.post("/signup",(req,res) => {
@@ -64,9 +64,12 @@ app.post("/signup",(req,res) => {
     console.log(username,password,email);
 
     pool.query(`INSERT INTO users (username,email,password) VALUES(?,?,?)`,[username,email,password], (err,result) => {
-      if(err) throw err
-      else console.log("data inserted succefully")
-      res.redirect("/")
+      if(err){
+        res.render("signup",{err:"database error"})
+      } else {
+        console.log("data inserted succefully")
+        res.redirect("/")
+      }
     })
 })
 

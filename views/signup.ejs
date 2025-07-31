@@ -65,8 +65,22 @@
                 <input type="password" name="password" placeholder="password" required>
                 <button type="submit">Signup</button>
                 <a href="http://localhost:3000/login">already have an account?</a>
+
+                 <% if (err) { %>
+                <p id="error-msg" style="color: red;"><%= err %></p>
+                <% } %>
+
             </form>
         </div>
     </main>
+
+    <script>
+        const err = document.getElementById("error-msg");
+        if(err){
+            setTimeout(() => {
+            err.style.display = "none"
+        },3000)
+        }
+    </script>
 </body>
 </html>
