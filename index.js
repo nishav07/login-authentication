@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const sql = require('mysql2');
+const session = require('express-session');
 require('dotenv').config();
 const path = require('path')
 const port = 3000;
@@ -9,6 +10,21 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set("views",path.join(__dirname,"views"));
 
+function isLoggedIn(req, res, next) {
+  if (req.session && req.session.user) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
+app.use(session(
+  {
+  secret:process.env.SECRET_KEY,        
+  resave: false,                   
+  saveUninitialized: false,         
+  cookie: { maxAge: 1000 * 60 * 60 } 
+  }))
 
 const pool = sql.createPool({
   host:process.env.DB_HOST,
@@ -28,7 +44,7 @@ pool.query("SELECT 1 + 1 AS result", (err, results) => {
 
 
 app.listen(port,() => {
-    console.log(`app running at localhost:${3000}`)
+    console.log(`app running at http://localhost:${port}/`)
 })
 
 app.get("/" , (req,res) => {
@@ -49,9 +65,9 @@ app.post("/signup",(req,res) => {
 
     pool.query(`INSERT INTO users (username,email,password) VALUES(?,?,?)`,[username,email,password], (err,result) => {
       if(err) throw err
-      else console.log("data inserted succefully");
+      else console.log("data inserted succefully")
+      res.redirect("/")
     })
-    res.redirect("/")
 })
 
 app.get("/login" , (req,res) => {
@@ -70,9 +86,20 @@ app.post("/login" , (req,res) => {
         res.render("login",{err:"database error"})
       } else if(data.length > 0){
         console.log(data[0])
-        res.render("userdash.ejs",{user:data[0]})
+        req.session.user = data[0];
+        // res.render("userdash.ejs",{user:data[0]})
+        res.redirect("/dashboard")
       } else {
         res.render("login",{err:"invalid username or password"})
       }
     })
+})
+
+app.get("/dashboard",(req,res) => {
+  if(req.session.user){
+    const user = req.session.user;
+    res.render("userdash",{ user })
+  } else {
+    res.render("login",{err:"please login first"})
+  }
 })

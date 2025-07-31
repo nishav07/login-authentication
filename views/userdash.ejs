@@ -3,9 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>userDash</title>
+    <title>User-Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            color: black;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        nav{
+            height: 5rem;
+            width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu{
+            width:auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            color: black;
+        }
+
+        .menu a{
+            font-size: 1.25rem;
+            font-family: sans-serif;
+        }
+
+        main{
+            width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            height: calc(100vh - 5rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user{
+            height: auto;
+            width:30rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:2rem;
+            border: 2px solid black;
+            border-radius: 2rem;
+        }
+
+        .user-details{
+            height: 3rem;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.25rem;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid gainsboro;
+        }
+    </style>
 </head>
 <body>
-    <h1>hello <%= user.username %></h1>
+    <nav>
+        <h1>logo</h1>
+
+        <div class="menu">
+            <a href="http://localhost:3000/login">Login</a>
+            <a href="http://localhost:3000/signup">Signup</a>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="user">
+                <h1>Your Account <i class="fa-solid fa-circle-user"></i></h1>
+                <div class="user-details">
+                    <p>Nishav1234</p>
+                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                </div>
+
+                <div class="user-details">
+                    <p>Nishav1234@gmail.com</p>
+                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                </div>
+
+                <div class="user-details">
+                    <p>nishav2015$</p>
+                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
