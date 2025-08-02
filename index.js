@@ -114,9 +114,20 @@ app.get("/dashboard",(req,res) => {
 
 app.get("/dashboard/:type/edit",isLoggedIn,(req,res) => {
   let type = req.params.type;
-  res.render("edit.ejs",{ type:type,err:null })
+  const user = req.session.user;
+  console.log({ type:type,user,err:null });
+  res.render("edit.ejs",{ type:type,user,err:null })
 })
 
-// app.post("dashboard/:type/edit",isLoggedIn,(req,res) => {
+app.post("/dashboard/:type/:id/edit",isLoggedIn,(req,res) => {
+  const {type,id} = req.body;
+  console.log({type,id});
+  // pool.query(`UPDATE users SET ? = ? WHERE id = ?`,[type],(err,data) => {
+  //   if(err){
+  //     console.log("database err",err)
+  //     return
+  //   }
 
-// })
+  // })
+  res.redirect("/dashboard")
+})

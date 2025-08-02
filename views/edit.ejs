@@ -65,7 +65,7 @@
             <h1>User <%= type %> edit page</h1>
             <% } %>
 
-            <form action="/dashboard/<% type %>/edit" method="post">
+            <form action="/dashboard/:<% type %>/:<%=user.id%>/edit" method="post">
                 <input type="<%= type %>" name="<%= type %>" placeholder="<%= type %>" required>
                 <button type="submit">edit <%= type %></button>
                 <% if (err) { %>
