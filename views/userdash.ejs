@@ -46,6 +46,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .user{
@@ -71,6 +73,11 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 2px solid gainsboro;
+        }
+
+        main p{
+            font-size: 1.25rem;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -103,6 +110,31 @@
                 </div>
             </div>
         </div>
+         <% if (err) { %>
+                <p id="error-msg" style="color: red;"><%= err %></p>
+                <% } %>
+
+
+          <% if (done) { %>
+                <p id="done-msg" style="color: rgb(68, 255, 143);"><%= done %></p>
+                <% } %>
     </main>
+
+
+    <script>
+         const err = document.getElementById("error-msg");
+        if(err){
+            setTimeout(() => {
+            err.style.display = "none"
+        },3000)
+        }
+
+        const done = document.getElementById("done-msg");
+        if(done){
+            setTimeout(() => {
+            done.style.display = "none"
+        },3000)
+        }
+    </script>
 </body>
 </html>

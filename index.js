@@ -106,7 +106,7 @@ app.post("/login" , (req,res) => {
 app.get("/dashboard",(req,res) => {
   if(req.session.user){
     const user = req.session.user;
-    res.render("userdash",{ user })
+    res.render("userdash",{ user,err:null,done:null })
   } else {
     res.render("login",{err:"please login first"});
   }
@@ -120,14 +120,28 @@ app.get("/dashboard/:type/edit",isLoggedIn,(req,res) => {
 })
 
 app.post("/dashboard/:type/:id/edit",isLoggedIn,(req,res) => {
-  const {type,id} = req.body;
-  console.log({type,id});
-  // pool.query(`UPDATE users SET ? = ? WHERE id = ?`,[type],(err,data) => {
-  //   if(err){
-  //     console.log("database err",err)
-  //     return
-  //   }
+  const data = req.body.data;
+  const user = req.session.user;
+  const {type,id} = req.params;
+  console.log([
+    { data,type,id }
+  ]);
 
-  // })
-  res.redirect("/dashboard")
+  if(type === "text"){
+    pool.query(`UPDATE users SET username = ? WHERE id = ?`,[data,id],(err,data) => {
+    if(err){
+      console.log("database err",err)
+      return
+    }
+    res.render("userdash.ejs",{user,err:null,done:`username chnaged succefully` })
+    return
+})
+  }
+  pool.query(`UPDATE users SET ${type} = ? WHERE id = ?`,[data,id],(err,data) => {
+    if(err){
+      console.log("database err",err)
+      return
+    }
+    res.render("userdash.ejs",{user,err:null,done:`${type} chnaged succefully` })
+})
 })
