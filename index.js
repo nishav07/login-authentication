@@ -9,6 +9,9 @@ app.set("view engine","ejs");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set("views",path.join(__dirname,"views"));
+const methodOverride = require(`method-override`);
+app.use(methodOverride('_method'));
+
 
 function isLoggedIn(req, res, next) {
   if (req.session && req.session.user) {
@@ -18,6 +21,7 @@ function isLoggedIn(req, res, next) {
   }
 }
 
+
 app.use(session(
   {
   secret:process.env.SECRET_KEY,        
@@ -25,6 +29,7 @@ app.use(session(
   saveUninitialized: false,         
   cookie: { maxAge: 1000 * 60 * 60 } 
   }))
+
 
 const pool = sql.createPool({
   host:process.env.DB_HOST,
@@ -103,6 +108,15 @@ app.get("/dashboard",(req,res) => {
     const user = req.session.user;
     res.render("userdash",{ user })
   } else {
-    res.render("login",{err:"please login first"})
+    res.render("login",{err:"please login first"});
   }
 })
+
+app.get("/dashboard/:type/edit",isLoggedIn,(req,res) => {
+  let type = req.params.type;
+  res.render("edit.ejs",{ type:type,err:null })
+})
+
+// app.post("dashboard/:type/edit",isLoggedIn,(req,res) => {
+
+// })

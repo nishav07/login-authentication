@@ -88,18 +88,18 @@
             <div class="user">
                 <h1>Your Account <i class="fa-solid fa-circle-user"></i></h1>
                 <div class="user-details">
-                    <p>Nishav1234</p>
-                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <p><%= user.username %></p>
+                    <a href="http://localhost:3000/dashboard/text/edit"><i class="fa-solid fa-pen-to-square"></i></a>
                 </div>
 
                 <div class="user-details">
-                    <p>Nishav1234@gmail.com</p>
-                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <p><%= user.email %></p>
+                    <a href="http://localhost:3000/dashboard/email/edit"><i class="fa-solid fa-pen-to-square"></i></a>
                 </div>
 
                 <div class="user-details">
-                    <p>nishav2015$</p>
-                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <p><%= user.password %></p>
+                    <a href="http://localhost:3000/dashboard/password/edit"><i class="fa-solid fa-pen-to-square"></i></a>
                 </div>
             </div>
         </div>

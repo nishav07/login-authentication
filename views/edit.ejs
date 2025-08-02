@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signup page</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            color: black;
+            box-sizing: border-box;
+            text-decoration: none;
+            outline: none;
+        }
+
+        main{
+            height: 100vh;
+            width: 100%;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container form{
+            height: auto;
+            width:30rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:2rem;
+            border: 2px solid black;
+            border-radius: 2rem;
+        }
+
+        .container input{
+            height: 4rem;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.25rem;
+            border-radius: 2rem;
+        }
+
+        .container a{
+            font-size: 1.25rem;
+        }
+
+        .container button{
+            height: 3rem;
+            width: 8rem;
+            font-size: 1.25rem;
+            border-radius: 2rem;
+        }
+
+    </style>
+</head>
+<body>
+    <main>
+        <div class="container">
+            <% if (type === "text") { %>
+             <h1>Username edit page</h1>
+            <% } else { %>
+            <h1>User <%= type %> edit page</h1>
+            <% } %>
+
+            <form action="/dashboard/<% type %>/edit" method="post">
+                <input type="<%= type %>" name="<%= type %>" placeholder="<%= type %>" required>
+                <button type="submit">edit <%= type %></button>
+                <% if (err) { %>
+                <p id="error-msg" style="color: red;"><%= err %></p>
+                <% } %>
+            </form>
+        </div>
+    </main>
+
+    <script>
+
+        const err = document.getElementById("error-msg");
+        if(err){
+            setTimeout(() => {
+            err.style.display = "none"
+        },3000)
+        }
+    </script>
+</body>
+
+<script>
+</script>
+</html>
