@@ -110,31 +110,31 @@
                 </div>
             </div>
         </div>
-         <% if (err) { %>
-                <p id="error-msg" style="color: red;"><%= err %></p>
+          <% if (error.length > 0) { %>
+                <p id="error-msg" style="color: red;"><%= error %></p>
                 <% } %>
 
 
-          <% if (done) { %>
-                <p id="done-msg" style="color: rgb(68, 255, 143);"><%= done %></p>
+          <% if (success.length > 0) { %>
+                <p id="done-msg" style="color: rgb(68, 255, 143);"><%= success %></p>
                 <% } %>
     </main>
 
 
     <script>
-         const err = document.getElementById("error-msg");
-        if(err){
-            setTimeout(() => {
-            err.style.display = "none"
-        },3000)
-        }
+        //  const err = document.getElementById("error-msg");
+        // if(err){
+        //     setTimeout(() => {
+        //     err.style.display = "none"
+        // },3000)
+        // }
 
-        const done = document.getElementById("done-msg");
-        if(done){
-            setTimeout(() => {
-            done.style.display = "none"
-        },3000)
-        }
+        // const done = document.getElementById("done-msg");
+        // if(done){
+        //     setTimeout(() => {
+        //     done.style.display = "none"
+        // },3000)
+        // }
     </script>
 </body>
 </html>

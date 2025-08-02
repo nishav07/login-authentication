@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const sql = require('mysql2');
 const session = require('express-session');
+const flash = require(`connect-flash`);
 require('dotenv').config();
 const path = require('path')
 const port = 3000;
@@ -11,6 +12,14 @@ app.use(express.urlencoded({extended:true}));
 app.set("views",path.join(__dirname,"views"));
 const methodOverride = require(`method-override`);
 app.use(methodOverride('_method'));
+
+app.use(session(
+  {
+  secret:process.env.SECRET_KEY,        
+  resave: false,                   
+  saveUninitialized: false,         
+  cookie: { maxAge: 1000 * 60 * 60 } 
+  }))
 
 
 function isLoggedIn(req, res, next) {
@@ -22,13 +31,14 @@ function isLoggedIn(req, res, next) {
 }
 
 
-app.use(session(
-  {
-  secret:process.env.SECRET_KEY,        
-  resave: false,                   
-  saveUninitialized: false,         
-  cookie: { maxAge: 1000 * 60 * 60 } 
-  }))
+  app.use(flash());
+
+
+  app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 
 const pool = sql.createPool({
@@ -116,10 +126,10 @@ app.get("/dashboard/:type/edit",isLoggedIn,(req,res) => {
   let type = req.params.type;
   const user = req.session.user;
   console.log({ type:type,user,err:null });
-  res.render("edit.ejs",{ type:type,user,err:null })
+  res.render("edit.ejs",{ type:type,user})
 })
 
-app.post("/dashboard/:type/:id/edit",isLoggedIn,(req,res) => {
+app.put("/dashboard/:type/:id/edit",isLoggedIn,(req,res) => {
   const data = req.body.data;
   const user = req.session.user;
   const {type,id} = req.params;
@@ -131,17 +141,23 @@ app.post("/dashboard/:type/:id/edit",isLoggedIn,(req,res) => {
     pool.query(`UPDATE users SET username = ? WHERE id = ?`,[data,id],(err,data) => {
     if(err){
       console.log("database err",err)
-      return
+      req.flash("error", "Something went wrong while updating.");
+      return res.redirect("/dashboard");
     }
-    res.render("userdash.ejs",{user,err:null,done:`username chnaged succefully` })
-    return
+    req.flash("success", `username updated succsefully`);
+    return res.redirect("/dashboard");
 })
-  }
-  pool.query(`UPDATE users SET ${type} = ? WHERE id = ?`,[data,id],(err,data) => {
+  } else {
+     pool.query(`UPDATE users SET ${type} = ? WHERE id = ?`,[data,id],(err,data) => {
     if(err){
       console.log("database err",err)
-      return
+      req.flash("error", "Something went wrong while updating.");
+      return res.redirect("/dashboard");
     }
-    res.render("userdash.ejs",{user,err:null,done:`${type} chnaged succefully` })
+    // res.render("userdash.ejs",{user,err:null,done:`${type} chnaged succefully` })
+    req.flash("success", `${type} updated succsefully`);
+    return res.redirect("/dashboard");
 })
+
+  }
 })
