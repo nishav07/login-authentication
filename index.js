@@ -144,6 +144,7 @@ app.put("/dashboard/:type/:id/edit",isLoggedIn,(req,res) => {
       req.flash("error", "Something went wrong while updating.");
       return res.redirect("/dashboard");
     }
+    req.session.user.username = req.body.data;
     req.flash("success", `username updated succsefully`);
     return res.redirect("/dashboard");
 })
@@ -154,7 +155,8 @@ app.put("/dashboard/:type/:id/edit",isLoggedIn,(req,res) => {
       req.flash("error", "Something went wrong while updating.");
       return res.redirect("/dashboard");
     }
-    // res.render("userdash.ejs",{user,err:null,done:`${type} chnaged succefully` })
+
+    req.session.user[type] = req.body.data;
     req.flash("success", `${type} updated succsefully`);
     return res.redirect("/dashboard");
 })
