@@ -10,7 +10,7 @@ async function hashPasswords(password) {
             hashPass
         }
     )
-    return
+    return hashPass
 }
 
 
@@ -21,9 +21,9 @@ async function checkPass(orignal,hash) {
 
 
 verify = async() => {
-const hashdb = hashPasswords("Nishav2015$");
+const hashdb = await hashPasswords("Nishav2015$");
 const userinput = "Nishav2015$";
-const isMatch = checkPass(userinput,hashdb)
+const isMatch = await checkPass(userinput,hashdb)
 
 if(isMatch){
     console.log("password is correct")
@@ -31,3 +31,5 @@ if(isMatch){
     console.log("password is wrong")
 }
 }
+
+verify();
