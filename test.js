@@ -21,8 +21,8 @@ async function checkPass(orignal,hash) {
 
 
 verify = async() => {
-const hashdb = await hashPasswords("Nishav2015$");
-const userinput = "Nishav2015$";
+const hashdb = await hashPasswords("abc222");
+const userinput = "abc234";
 const isMatch = await checkPass(userinput,hashdb)
 
 if(isMatch){
