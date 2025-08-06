@@ -3,6 +3,7 @@ const app = express();
 const sql = require('mysql2');
 const session = require('express-session');
 const flash = require(`connect-flash`);
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 const path = require('path')
 const port = 3000;
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set("views",path.join(__dirname,"views"));
 const methodOverride = require(`method-override`);
+const { isAsyncFunction } = require('util/types');
 app.use(methodOverride('_method'));
 
 app.use(session(
@@ -30,15 +32,15 @@ function isLoggedIn(req, res, next) {
   }
 }
 
-
   app.use(flash());
 
 
-  app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
-});
+  }
+)
 
 
 const pool = sql.createPool({
@@ -49,6 +51,7 @@ const pool = sql.createPool({
   port:process.env.DB_PORT
 })
 
+
 pool.query("SELECT 1 + 1 AS result", (err, results) => {
   if (err) {
     console.error("❌ Error connecting:", err.message);
@@ -58,6 +61,15 @@ pool.query("SELECT 1 + 1 AS result", (err, results) => {
 });
 
 
+async function hashing(pass) {
+  const saltRounds = 10;
+  const hashPass = await bcrypt.hash(pass,saltRounds);
+  return hashPass
+}
+
+async function compare(password,hashedPass){
+  isMtach = await bcrypt.compare(password,hashedPass);
+}
 app.listen(port,() => {
     console.log(`app running at http://localhost:${port}/`)
 })
@@ -70,17 +82,19 @@ app.get("/signup",(req,res) => {
     res.render("signup",{ err: null });
 })
 
-app.post("/signup",(req,res) => {
+app.post("/signup",async (req,res) => {
     console.log(req.body);
     let data = req.body;
     let username = data.username;
     let email = data.email;
     let password = data.password;
-    console.log(username,password,email);
+    let hashedPass = await hashing(password)
+    console.log(username,password,email,hashedPass);
 
-    pool.query(`INSERT INTO users (username,email,password) VALUES(?,?,?)`,[username,email,password], (err,result) => {
+    pool.query(`INSERT INTO users (username,email,password) VALUES(?,?,?)`,[username,email,hashedPass], (err,result) => {
       if(err){
-        res.render("signup",{err:"database error"})
+        console.log(`err:${err}`)
+        res.render("signup",{err:"database error",err})
       } else {
         console.log("data inserted succefully")
         res.redirect("/")
@@ -92,22 +106,26 @@ app.get("/login" , (req,res) => {
     res.render("login",{ err: null });
 })
 
-app.post("/login" , (req,res) => {
+app.post("/login" , async (req,res) => {
     console.log(req.body);
     let data = req.body;
     let username = data.username;
     let password = data.password;
     console.log(username,password);
-    pool.query(`SELECT * FROM users WHERE username = ? AND password = ?`,[username,password],(err,data) => {
+    pool.query(`SELECT * FROM users WHERE username = ?`,[username],async(err,data) => {
       
+      const hashedPass = data[0].password;
+      const check = await compare(password,hashedPass);
       if(err){
+        console.log(err)
         res.render("login",{err:"database error"})
-      } else if(data.length > 0){
+      } else if(data.length > 0 && check === true){
+        console.log(err)
         console.log(data[0])
         req.session.user = data[0];
-        // res.render("userdash.ejs",{user:data[0]})
         res.redirect("/dashboard")
       } else {
+        console.log(err)
         res.render("login",{err:"invalid username or password"})
       }
     })
