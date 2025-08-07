@@ -51,6 +51,7 @@ const pool = sql.createPool({
   port:process.env.DB_PORT
 })
 
+const promisePool = pool.promise();
 
 pool.query("SELECT 1 + 1 AS result", (err, results) => {
   if (err) {
@@ -112,23 +113,27 @@ app.post("/login" , async (req,res) => {
     let username = data.username;
     let password = data.password;
     console.log(username,password);
-    pool.query(`SELECT * FROM users WHERE username = ?`,[username],async(err,data) => {
+
+    try {
+        const [row] = await promisePool.query(`SELECT * FROM users WHERE username = ?`,[username])
+        console.log([row]);
+        if(row.length > 0){
+        console.log(row[0])
+        const hashedPass = row[0].password;
+        const check = await compare(password,hashedPass);
+        
+            if(check) {
+             console.log(check)
+            req.session.user = row[0];
+            res.redirect("/dashboard")
+          }
+      } 
+
+    } catch (err) {
+      console.log(`err: ${err}`)
+      res.render("login",{err:"database error"})
+    }
       
-      const hashedPass = data[0].password;
-      const check = await compare(password,hashedPass);
-      if(err){
-        console.log(err)
-        res.render("login",{err:"database error"})
-      } else if(data.length > 0 && check === true){
-        console.log(err)
-        console.log(data[0])
-        req.session.user = data[0];
-        res.redirect("/dashboard")
-      } else {
-        console.log(err)
-        res.render("login",{err:"invalid username or password"})
-      }
-    })
 })
 
 app.get("/dashboard",(req,res) => {
