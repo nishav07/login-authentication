@@ -117,18 +117,20 @@ app.post("/login" , async (req,res) => {
     try {
         const [row] = await promisePool.query(`SELECT * FROM users WHERE username = ?`,[username])
         console.log([row]);
+
         if(row.length > 0){
         console.log(row[0])
         const hashedPass = row[0].password;
         const check = await compare(password,hashedPass);
-        
             if(check) {
-             console.log(check)
             req.session.user = row[0];
             res.redirect("/dashboard")
+          } else {
+             res.render("login",{err:"password incorrect"})
           }
-      } 
-
+      } else {
+         res.render("login",{err:"404 username Not found"})
+      }
     } catch (err) {
       console.log(`err: ${err}`)
       res.render("login",{err:"database error"})
