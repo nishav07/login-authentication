@@ -6,16 +6,16 @@ const flash = require(`connect-flash`);
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const path = require('path')
-const port = 3000;
-app.set("view engine","ejs");
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-app.set("views",path.join(__dirname,"views"));
-const methodOverride = require(`method-override`);
+const port = 3000;`method-override`);
 const { isAsyncFunction } = require('util/types');
 const { isMarkedAsUntransferable } = require('worker_threads');
 app.use(methodOverride('_method'));
 
+app.set("view engine","ejs");
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.set("views",path.join(__dirname,"views"));
+const methodOverride = require(
 app.use(session(
   {
   secret:process.env.SECRET_KEY,        
