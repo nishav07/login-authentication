@@ -13,6 +13,7 @@ app.use(express.urlencoded({extended:true}));
 app.set("views",path.join(__dirname,"views"));
 const methodOverride = require(`method-override`);
 const { isAsyncFunction } = require('util/types');
+const { isMarkedAsUntransferable } = require('worker_threads');
 app.use(methodOverride('_method'));
 
 app.use(session(
@@ -69,7 +70,8 @@ async function hashing(pass) {
 }
 
 async function compare(password,hashedPass){
-  isMtach = await bcrypt.compare(password,hashedPass);
+  const isMtach = await bcrypt.compare(password,hashedPass);
+  return isMtach;
 }
 app.listen(port,() => {
     console.log(`app running at http://localhost:${port}/`)
@@ -122,7 +124,8 @@ app.post("/login" , async (req,res) => {
         console.log(row[0])
         const hashedPass = row[0].password;
         const check = await compare(password,hashedPass);
-            if(check) {
+        console.log(check)
+            if(check === true) {
             req.session.user = row[0];
             res.redirect("/dashboard")
           } else {
