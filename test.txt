@@ -10,6 +10,8 @@ async function checkPass(orignal,hash) {
 }
 
 
+
+
 verify = async() => {
 const hashdb = await hashPasswords("abc222");
 const userinput = "abc234";
@@ -23,3 +25,14 @@ if(isMatch){
 }
 
 verify();
+
+
+
+
+
+
+
+
+
+
+
